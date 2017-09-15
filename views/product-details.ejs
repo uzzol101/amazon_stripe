@@ -1,0 +1,43 @@
+<% include ./partials/header%>
+<div class="container">
+	<div class="row">
+	
+			<div class="col-sm-6 ">
+				<img src="<%=prod.image%>" alt="" class="img-responsive img-thumbnail">
+				
+			</div>
+			<div class="col-sm-6">
+				<h3><%=prod.name%></h3>
+				<p >$ <span id="price"><%=prod.price%></span></p>
+				<div class="panel panel-default">
+					<h3>Add to cart</h3>
+					<div class="panel-body">
+						<div class="input-group">
+							<button id="decrement">-</button>
+							<button class="quantity">0</button>
+							<button id="increment">+</button>
+						</div>
+						<form action="/cart" method="POST" role="form">
+							
+						
+							<div class="form-group">
+								<label for="">Total Price</label>
+								<input id="totalPrice" type="text" class="form-control" placeholder="Input field" value="0">
+								<input name="product_id" type="text" class="hidden" value="<%=prod._id%>">
+								<input name="priceValue" type="text" class="hidden" value="<%=prod.price%>">
+								<input id="numProd" name="quantity"  type="text" class="hidden">
+								<input id="total" name="total" type="text" class="hidden ">
+							</div>
+						
+							
+						
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+
+					</div>
+				</div>
+			</div>
+			
+	</div>
+</div>
+<%include ./partials/footer%>

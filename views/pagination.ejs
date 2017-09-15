@@ -1,0 +1,28 @@
+<% include ./partials/header%>
+<div class="container">
+	<div class="row">
+		<%products.forEach((prod)=>{%>
+			<div class="col-sm-4">
+				<a href="/product/<%=prod._id%>">
+					<img src="<%=prod.image%>" alt="" class="img-responsive img-thumbnail">
+				<h3><%=prod.name%></h3>
+				<p>$<%=prod.price%></p>
+				</a>
+			</div>
+			<%})%>
+	</div>
+	<div class="row">
+		<div class="col-sm-6 col-sm-offset-3">
+		 <ul class="pagination">
+				<li><a href="#">&laquo;</a></li>
+				<%for (var i = 1; i <= totalPage; i++){%>
+				<li><a href="/page/<%=i%>"><%=i%></a></li>
+					<%}%>
+				<li><a href="#">&raquo;</a></li>
+			</ul> 
+			
+		
+		</div>
+	</div>
+</div>
+<%include ./partials/footer%>

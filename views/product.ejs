@@ -1,0 +1,15 @@
+<% include ./partials/header%>
+<div class="container">
+	<div class="row">
+		<%products.forEach((prod)=>{%>
+			<div class="col-sm-3">
+				<a href="/product/<%=prod._id%>">
+					<img src="<%=prod.image%>" alt="" class="img-responsive img-thumbnail">
+				<h3><%=prod.name%></h3>
+				<p>$<%=prod.price%></p>
+				</a>
+			</div>
+			<%})%>
+	</div>
+</div>
+<%include ./partials/footer%>

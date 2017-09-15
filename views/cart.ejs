@@ -1,0 +1,36 @@
+<% include ./partials/header%>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-6 ">
+			<ul class="list-group list-unstyled">
+				<%foundcart.items.forEach((cart)=>{%>
+					<li class="list-item">
+						<div class="row">
+							<div class="col-sm-4"><img class="img-responsive img-thumbnail" src="<%=cart.item.image%>" alt=""> </div>
+							<div class="col-sm-8">
+								<p>Price $<%=cart.item.price%></p>
+								<p>Quantity <%=cart.quantity%></p>
+
+								<form action="/cart/<%=cart._id%>" method="POST" role="form">
+									
+									<button type="submit" class="btn btn-primary">remove</button>
+								</form>
+							</div>
+						</div>
+					</li>
+				<%})%>
+			</ul>
+		</div>
+		<div class="col-sm-6">
+			<div class="panel panel-default">
+				
+				<div class="panel-body">
+
+					<button type="button" class="btn btn-info">Pay $<%=cart%></button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<% include ./partials/footer%>
