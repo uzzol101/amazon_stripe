@@ -1,8 +1,13 @@
 var express = require('express');
 var Category = require("../models/category");
 var Product = require("../models/product");
+var User = require("../models/user");
 var Cart = require("../models/cart");
 var router = express.Router();
+var async = require("async");
+var stripe = require("stripe")(
+    "sk_test_3Z0OYGthzRXVWqzvY38kcZ01"
+);
 
 // Product.createMapping(function(err, mapping) {
 //     if (err) {
@@ -135,6 +140,8 @@ router.get("/cart", (req, res, next) => {
 router.post("/cart/:id", (req, res, next) => {
     var id = req.params.id;
     console.log(id);
+
+
     Cart.findOne({ owner: req.user._id }, (err, cart) => {
         if (err) {
             console.log("Can't find cart");
@@ -158,32 +165,84 @@ router.post("/cart/:id", (req, res, next) => {
 
 router.post("/cart", (req, res, next) => {
 
-Cart.findOne({ owner: req.user._id }, (err, cart) => {
-    console.log(req.body.total);
-    cart.items.push({
-        item: req.body.product_id,
-        price: parseFloat(req.body.total),
-        quantity: parseInt(req.body.quantity)
+
+    Cart.findOne({ owner: req.user._id }, (err, cart) => {
+        console.log(req.body.total);
+        cart.items.push({
+            item: req.body.product_id,
+            price: parseFloat(req.body.total),
+            quantity: parseInt(req.body.quantity)
+        });
+
+        cart.total = (parseFloat(req.body.total)).toFixed(2);
+
+        cart.save((err) => {
+            if (err) return next(err);
+            res.redirect("back");
+
+        });
     });
 
-    cart.total = (parseFloat(req.body.total)).toFixed(2);
-
-    cart.save((err) => {
-        if (err) return next(err);
-        res.redirect("back");
-
-    });
 });
 
-});
+router.post("/payment", (req, res, next) => {
+    var stripToken = req.body.stripeToken;
+    var currentCharges = parseInt(req.body.totalCharge);
+    stripe.customers.create({
+        source: stripToken // obtained with Stripe.js
+    }).then((customer) => {
+        return stripe.charges.create({
+            amount: currentCharges * 100,
+            currency: "usd",
+            customer: customer.id
+
+        })
+    }).then((charge) => {
+        async.waterfall([
+            function(callback) {
+                Cart.findOne({ owner: req.user._id }, (err, cart) => {
+                    callback(err, cart)
+                })
+            },
+
+            function(cart, callback) {
+                console.log(cart);
+                User.findOne({ _id: req.user._id }, (err, user) => {
+                    if (user) {
+                        for (var i = 0; i < cart.items.length; i++) {
+                            user.history.push({
+                                item: cart.items[i].item,
+                                paid: cart.items[i].price
+                            })
+                        }
+                        user.save((err, user) => {
+                            callback(err, user);
+                        })
+                    }
+                })
+            },
+
+            function(user, callback) {
+                Cart.update({ owner: req.user._id }, { $set: { items: [], total: 0 } }, (err, update) => {
+                    if (update) {
+                        res.redirect("/");
+                    }
+                })
+            }
+
+        ]);
+    })
+
+
+})
 
 
 
 module.exports = router;
 
 // Cart.find({}, (err, cart) => {
-            //     console.log(cart);
-            // })
+//     console.log(cart);
+// })
 function isAuth(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
@@ -192,3 +251,7 @@ function isAuth(req, res, next) {
     }
 
 }
+
+User.find({}, (err, user) => {
+    console.log(user);
+})

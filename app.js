@@ -49,9 +49,8 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-
 app.use(cartLength);
+
 // global var middleware
 app.use(function(req, res, next) {
     res.locals.user = req.user;
@@ -61,6 +60,9 @@ app.use(function(req, res, next) {
 
     next();
 });
+
+
+
 
 app.use(function(req, res, next) {
 

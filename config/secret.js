@@ -1,5 +1,5 @@
 module.exports = {
-    database: "mongodb://uzzol101:m08520280@ds137054.mlab.com:37054/amazon",
+    database: "mongodb://localhost/amazon",
     secretKey: "uzzol@#{}!&^0#",
     port: process.env.PORT || 3000
 }
