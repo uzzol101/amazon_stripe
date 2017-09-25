@@ -44,9 +44,7 @@ userSchema.pre("save", function(next) {
 // compare password in the databse and the one that the user type in
 
 userSchema.methods.comparePassword = function(password) {
-    return bcrypt.compare(password, this.password, function(err, res) {
-
-    });
+    return bcrypt.compare(password, this.password);
 }
 
 

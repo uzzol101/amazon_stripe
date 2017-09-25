@@ -21,22 +21,32 @@ passport.use("local-login", new LocalStrategy({
     passwordField: "password",
     passReqToCallback: true,
 }, function(req, email, password, done) {
+    console.log(email);
     User.findOne({ email: email }, (err, user) => {
         if (err) {
             return done(err);
         }
+        console.log(user);
 
         if (!user) {
             req.flash("error", "User not found");
             return done(null, false);
         }
 
-        if (!user.comparePassword) {
-            req.flash("error", "password do not match");
-            return done(null, false)
-        }
 
-        return done(null, user);
+
+        user.comparePassword(password).then((isMatch) => {
+
+            if (isMatch) {
+
+                return done(null, user);
+            } else {
+
+                return done(null, false)
+            }
+        });
+
+
     });
 }));
 

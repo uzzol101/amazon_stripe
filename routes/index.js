@@ -252,6 +252,6 @@ function isAuth(req, res, next) {
 
 }
 
-User.find({}, (err, user) => {
-    console.log(user);
-})
+// User.find({}, (err, user) => {
+            //     console.log(user);
+            // })

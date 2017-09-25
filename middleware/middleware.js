@@ -6,7 +6,6 @@ module.exports = function(req, res, next) {
     if (req.user) {
         var total = 0;
         Cart.findOne({ owner: req.user._id }, (err, cart) => {
-            console.log("Cart from middleware");
 
             // res.locals.cart = 2000;
 
@@ -26,7 +25,7 @@ module.exports = function(req, res, next) {
         next();
 
     } else {
-        console.log("No user loged in");
+
 
         next();
     }

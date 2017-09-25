@@ -5,6 +5,8 @@ var passport = require("passport");
 var async = require("async");
 var Cart = require("../models/cart");
 var passportConfig = require("../config/passport");
+
+
 //register new user
 router.get('/register', function(req, res, next) {
     res.render("register");
@@ -58,7 +60,7 @@ router.get("/login", (req, res, next) => {
     }
 });
 
-router.post("/login", passport.authenticate("local-login", { failureRedirect: "/login" }), (req, res, next) => {
+router.post("/login", passport.authenticate("local-login", { failureRedirect: "/users/login" }), (req, res, next) => {
     req.flash("success", "Welcome user");
     res.redirect("/");
 });
@@ -90,5 +92,5 @@ module.exports = router;
 // });
 
 // User.remove((err, user) => {
-//     console.log("all user removed");
-// });
+            //     console.log("all user removed");
+            // });
