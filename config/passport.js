@@ -38,10 +38,11 @@ passport.use("local-login", new LocalStrategy({
         user.comparePassword(password).then((isMatch) => {
 
             if (isMatch) {
-                req.flash("success","Welcome back");
+
+                req.flash("success", "Welcome back");
                 return done(null, user);
             } else {
-                req.flash("error","Oops wrong password");
+                req.flash("error", "Oops wrong password");
                 return done(null, false)
             }
         });

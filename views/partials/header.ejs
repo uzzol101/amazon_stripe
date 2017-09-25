@@ -96,6 +96,17 @@
 					<strong><%=success%></strong>
 				</div>
 			<%}%>
+
+
+			<%if(error && error.length > 0){%>
+				<div class="alert alert-danger">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<strong><%=error%></strong>
+				</div>
+			<%}%>
+
+
+
 		</div>
 	</div>
 </div>
